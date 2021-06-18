@@ -8,6 +8,9 @@
         },
         {
             "path": "fe-web-api"
+        },
+        {
+            "path": "be-auth-dev"
         }
     ]
 }
