@@ -1,4 +1,3 @@
-import cors from 'cors';
 import express from 'express';
 
 const app = express();
@@ -6,14 +5,6 @@ const port = 9001;
 
 const HTTP_STATUS_OK = 200;
 const HTTP_STATUS_FORBIDDEN = 403;
-
-// Register the CORS middleware.
-
-const corsConfig = {
-    exposedHeaders: [ 'Authorization' ]
-};
-
-app.use( cors( corsConfig ) );
 
 // Register the parsers.
 

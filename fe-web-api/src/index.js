@@ -24,17 +24,11 @@ const urlAuthSvc = 'http://localhost:9001';
 const proxyAuthSvc = createProxyMiddleware(
     ['/login' ],
     {
-        target: urlAuthSvc,
-        changeOrigin: true
+        target: urlAuthSvc
     }
 );
 
 app.use( proxyAuthSvc );
-
-// Create and register the parsers (must be done AFTER the proxies)
-
-app.use( express.json() );
-app.use( express.urlencoded( { extended : true } ))
 
 // Register any local handles.
 
