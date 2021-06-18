@@ -5,6 +5,9 @@
         },
         {
             "path": "docker-files"
+        },
+        {
+            "path": "fe-web-api"
         }
     ]
 }

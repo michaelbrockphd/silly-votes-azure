@@ -35,6 +35,8 @@ import {
     useState
 } from 'react';
 
+import axios from 'axios';
+
 const authStorage = () => {
     return sessionStorage;
 };
@@ -45,6 +47,9 @@ const getInitialState = () => {
     return token === "true";
 };
 
+const baseUrl = 'http://localhost:9000';
+const methodNameLogin = 'login';
+
 const IsAuthenticatedContext = createContext( false );
 
 export function AuthorizationProvider( {children} ) {
@@ -53,9 +58,36 @@ export function AuthorizationProvider( {children} ) {
     const [isLoggedIn, setIsLoggedIn] = useState(initial);
 
     async function login() {
-        authStorage().setItem( "authed", "true" );
+        const reqData = {
+            email: 'whyMe@example.com'
+        };
 
-        setIsLoggedIn(true);
+        const parameters = {
+            method: 'post',
+            url: `${baseUrl}/${methodNameLogin}`,
+            data: reqData
+        };
+
+        axios( parameters )
+            .then( (rsp) => {
+                const authHeaderVal = rsp.headers[ 'authorization' ];
+
+                if( authHeaderVal ) {
+                    console.log( `authHead: ${authHeaderVal}` );
+
+                    authStorage().setItem( "authed", "true" );
+
+                    authStorage().setItem( "authHeader", authHeaderVal );
+
+                    setIsLoggedIn(true);
+                }
+                else {
+                    alert( "Login failed, :( " );
+                }
+            } )
+            .catch( (err) => {
+                console.log( err );
+            } );
     };
     
     async function logout() {
