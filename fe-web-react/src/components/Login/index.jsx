@@ -1,14 +1,25 @@
+// Taken from https://ui.dev/react-router-v4-protected-routes-authentication/
+
 import { Button } from '@material-ui/core';
+import { Redirect } from 'react-router-dom';
 
 import { useAuthorization } from '../../contexts/AuthorizationContext';
 
-const Login = () => {
-    const { login } = useAuthorization();
-    
+const Login = (props) => {
+    const {
+        login,
+        isLoggedIn
+    } = useAuthorization();
+        
+    const { from } = props.location.state
+                    || { from: { pathname: '/' } };
+
+    if(isLoggedIn) {
+        return <Redirect to={from} />;
+    }
+
     const doLogin = () => {
-        login().then( () => {
-                    window.location = "/members";
-                } );
+        login();
     }
 
     return(
