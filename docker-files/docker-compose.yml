@@ -1,0 +1,12 @@
+version: '3.9'
+
+services:
+    fe-web:
+        build:
+            context: ../fe-web-react
+
+        image: sv_fe_web
+
+        ports:
+            - target: 4000
+              published: 4000

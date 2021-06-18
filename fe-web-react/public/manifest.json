@@ -1,0 +1,9 @@
+{
+  "short_name": "Silly Votes",
+  "name": "Simple React App for conducting silly votes.",
+  "icons": [],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#000000",
+  "background_color": "#ffffff"
+}

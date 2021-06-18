@@ -1,0 +1,7 @@
+.companyTitle {
+    flex-grow: 1;
+}
+
+.loggedInUser {
+    padding-right: 0.5em;
+}
