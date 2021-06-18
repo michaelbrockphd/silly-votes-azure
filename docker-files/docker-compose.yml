@@ -8,5 +8,5 @@ services:
         image: sv_fe_web
 
         ports:
-            - target: 4000
-              published: 4000
+            - target: 8000
+              published: 8000

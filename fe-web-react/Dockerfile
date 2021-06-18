@@ -20,4 +20,4 @@ COPY --from=fe_web_react_build /fe-web-react-build/build ./build/
 
 RUN npm -g install serve
 
-CMD ["serve", "-s", "build", "-l", "4000"]
+CMD ["serve", "-s", "build", "-l", "8000"]
