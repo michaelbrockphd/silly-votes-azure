@@ -3,7 +3,7 @@ import express from 'express';
 import { createProxyMiddleware } from 'http-proxy-middleware';
 
 const app = express();
-const port = 9000;
+const port = process.env.FE_WEB_API_PORT || 9000;
 
 const HTTP_STATUS_OK = 200;
 const HTTP_STATUS_TEA_POT = 418;
@@ -19,7 +19,7 @@ app.use( cors( corsConfig ) );
 
 // Create and register the proxies.
 
-const urlAuthSvc = 'http://localhost:9001';
+const urlAuthSvc = process.env.BE_AUTH_URL || 'http://localhost:9001';
 
 const proxyAuthSvc = createProxyMiddleware(
     ['/login' ],

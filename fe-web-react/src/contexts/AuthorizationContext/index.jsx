@@ -47,7 +47,7 @@ const getInitialState = () => {
     return token === "true";
 };
 
-const baseUrl = 'http://localhost:9000';
+const baseUrl = process.env.FE_WEB_API_URL || 'http://localhost:9000';
 const methodNameLogin = 'login';
 
 const IsAuthenticatedContext = createContext( false );

@@ -1,7 +1,7 @@
 import express from 'express';
 
 const app = express();
-const port = 9001;
+const port = process.env.BE_AUTH_DEV_PORT || 9001;
 
 const HTTP_STATUS_OK = 200;
 const HTTP_STATUS_FORBIDDEN = 403;
