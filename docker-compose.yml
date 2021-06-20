@@ -3,7 +3,7 @@ version: '3.9'
 services:
     be-auth:
         build:
-            context: ../be-auth-dev
+            context: ./be-auth-dev
 
         image: sv_be-auth:dev
 
@@ -16,7 +16,7 @@ services:
 
     fe-web-api:
         build:
-            context: ../fe-web-api
+            context: ./fe-web-api
 
         image: sv_fe-web-api
 
@@ -32,7 +32,7 @@ services:
 
     fe-web:
         build:
-            context: ../fe-web-react
+            context: ./fe-web-react
 
         image: sv_fe_web
 
