@@ -5,6 +5,12 @@
         },
         {
             "path": "docker-files"
+        },
+        {
+            "path": "fe-web-api"
+        },
+        {
+            "path": "be-auth-dev"
         }
     ]
 }

@@ -1,12 +1,51 @@
 version: '3.9'
 
 services:
+    be-auth:
+        build:
+            context: ../be-auth-dev
+
+        image: sv_be-auth:dev
+
+        ports:
+            - target: 9001
+              published: 9001
+
+        networks:
+            - net-pub
+
+    fe-web-api:
+        build:
+            context: ../fe-web-api
+
+        image: sv_fe-web-api
+
+        environment:
+            - BE_AUTH_URL=http://be-auth:9001
+
+        ports:
+            - target: 9000
+              published: 9000
+
+        networks:
+            - net-pub
+
     fe-web:
         build:
             context: ../fe-web-react
 
         image: sv_fe_web
 
+        environment:
+            - FE_WEB_API_URL=http://fe-web-api:9000
+
         ports:
             - target: 8000
               published: 8000
+
+        networks:
+            - net-pub
+
+networks:
+    net-pub:
+        name: silly-votes-net-pub
