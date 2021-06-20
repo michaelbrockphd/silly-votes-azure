@@ -1,7 +1,10 @@
 //import api from '../Api';
 //import Auth from '../AuthWrapper';
+import axios from 'axios';
 
-import testData from '../data/testCampaigns.json';
+//import testData from '../data/testCampaigns.json';
+
+const baseUrl = process.env.FE_WEB_API_URL || 'http://localhost:9000';
 
 class WebApi {
     /*getCampaigns() {
@@ -21,7 +24,7 @@ class WebApi {
         );
     }*/
 
-    getCampaigns() {
+    /*getCampaigns() {
         var rtn = new Promise((kept, broken) => {
             setTimeout( () => {
                 var rtnRsp = {
@@ -33,6 +36,15 @@ class WebApi {
         } );
 
         return( rtn );
+    }*/
+
+    getCampaigns() {
+        const parameters = {
+            method: 'get',
+            url: `${baseUrl}/campaigns`
+        };
+
+        return( axios( parameters ) );
     }
 }
 
