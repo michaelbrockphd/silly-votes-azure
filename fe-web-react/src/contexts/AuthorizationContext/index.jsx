@@ -28,6 +28,8 @@ class AuthWrapper {
 
 // Sourced from: https://dev.to/finiam/predictable-react-authentication-with-the-context-api-g10
 
+import axios from 'axios';
+import jwt from 'jsonwebtoken';
 import {
     createContext,
     useContext,
@@ -35,16 +37,26 @@ import {
     useState
 } from 'react';
 
-import axios from 'axios';
+const LOCAL_HEADER_NAME_AUTH = "sv-auth-token";
 
 const authStorage = () => {
     return sessionStorage;
 };
 
 const getInitialState = () => {
-    const token = authStorage().getItem( "authed" );
+    var rtnIsLoggedIn = false;
 
-    return token === "true";
+    const token = authStorage().getItem( LOCAL_HEADER_NAME_AUTH );
+
+    if(token) {
+        const decoded = jwt.decode(token);
+
+        if(decoded) {
+            rtnIsLoggedIn = !!decoded.email;
+        }
+    }
+
+    return rtnIsLoggedIn;
 };
 
 const baseUrl = process.env.FE_WEB_API_URL || 'http://localhost:9000';
@@ -57,9 +69,9 @@ export function AuthorizationProvider( {children} ) {
 
     const [isLoggedIn, setIsLoggedIn] = useState(initial);
 
-    async function login() {
+    async function login( userDetails ) {
         const reqData = {
-            email: 'whyMe@example.com'
+            email: userDetails.email
         };
 
         const parameters = {
@@ -75,9 +87,7 @@ export function AuthorizationProvider( {children} ) {
                 if( authHeaderVal ) {
                     console.log( `authHead: ${authHeaderVal}` );
 
-                    authStorage().setItem( "authed", "true" );
-
-                    authStorage().setItem( "authHeader", authHeaderVal );
+                    authStorage().setItem( LOCAL_HEADER_NAME_AUTH, authHeaderVal );
 
                     setIsLoggedIn(true);
                 }
@@ -91,7 +101,7 @@ export function AuthorizationProvider( {children} ) {
     };
     
     async function logout() {
-        authStorage().removeItem( "authed" );
+        authStorage().removeItem( LOCAL_HEADER_NAME_AUTH );
 
         setIsLoggedIn(false);
     };

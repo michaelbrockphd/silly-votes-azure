@@ -1,10 +1,15 @@
 import express from 'express';
+import jwt from 'jsonwebtoken';
 
 const app = express();
 const port = process.env.BE_AUTH_DEV_PORT || 9001;
 
 const HTTP_STATUS_OK = 200;
 const HTTP_STATUS_FORBIDDEN = 403;
+
+// TODO: Make this a docker secret
+
+const secret = "gakushuu fukurou";
 
 // Register the parsers.
 
@@ -16,14 +21,21 @@ app.use( express.urlencoded( { extended : true } ))
 app.post( '/login', (req, res ) => {
     const requestData = req.body;
 
-    console.log(requestData);
-
     const userEmail = requestData.email;
 
     if(userEmail) {
-        // For now, just echo the email back.
+        const clearToken = {
+            email: userEmail
+        };
+
+        const options = {
+            expiresIn: "2h"
+        };
+
+        const token = jwt.sign( clearToken, secret, options );
+
         res.set({
-            "Authorization": userEmail
+            "Authorization": token
         });
 
         res.status( HTTP_STATUS_OK );
