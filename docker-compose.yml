@@ -14,6 +14,19 @@ services:
         networks:
             - net-pub
 
+    be-campaigns:
+        build:
+            context: ./be-campaigns
+
+        image: sv_be-campaigns
+
+        ports:
+            - target: 9002
+              published: 9002
+
+        networks:
+            - net-pub
+
     fe-web-api:
         build:
             context: ./fe-web-api
@@ -22,6 +35,7 @@ services:
 
         environment:
             - BE_AUTH_URL=http://be-auth:9001
+            - BE_CAMPAIGNS_URL=http://be-campaigns:9002
 
         ports:
             - target: 9000
