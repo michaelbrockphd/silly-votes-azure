@@ -37,6 +37,9 @@ services:
             - net-pub
 
     be-campaigns:
+        environment:
+            - DB_RO=mongodb://adent:earth@db:27017/sillyvotes
+
         build:
             context: ./be-campaigns
 
