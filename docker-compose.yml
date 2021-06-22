@@ -1,6 +1,28 @@
 version: '3.9'
 
 services:
+    db:
+        environment:
+            - MONGO_INITDB_ROOT_USERNAME=root
+            - MONGO_INITDB_ROOT_PASSWORD=babelfishe
+
+        build:
+            context: ./db-mongo
+
+        image: sv_db
+
+        volumes:
+            - type: volume
+              source: vol-db
+              target: /data/db
+
+        ports:
+            - target: 27017
+              published: 27017
+
+        networks:
+            - net-pub
+
     be-auth:
         build:
             context: ./be-auth-dev
@@ -28,14 +50,14 @@ services:
             - net-pub
 
     fe-web-api:
+        environment:
+            - BE_AUTH_URL=http://be-auth:9001
+            - BE_CAMPAIGNS_URL=http://be-campaigns:9002
+
         build:
             context: ./fe-web-api
 
         image: sv_fe-web-api
-
-        environment:
-            - BE_AUTH_URL=http://be-auth:9001
-            - BE_CAMPAIGNS_URL=http://be-campaigns:9002
 
         ports:
             - target: 9000
@@ -45,13 +67,13 @@ services:
             - net-pub
 
     fe-web:
+        environment:
+            - FE_WEB_API_URL=http://fe-web-api:9000
+
         build:
             context: ./fe-web-react
 
         image: sv_fe_web
-
-        environment:
-            - FE_WEB_API_URL=http://fe-web-api:9000
 
         ports:
             - target: 8000
@@ -59,6 +81,9 @@ services:
 
         networks:
             - net-pub
+
+volumes:
+    vol-db:
 
 networks:
     net-pub:
