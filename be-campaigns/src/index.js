@@ -1,5 +1,4 @@
 import express from 'express';
-import fs from 'fs';
 
 import createContext from './data/CampaignContext.js';
 
@@ -15,15 +14,6 @@ app.use( express.json() );
 app.use( express.urlencoded( { extended : true } ));
 
 // Register the local handles.
-
-/*app.get( '/campaigns', (req, res) => {
-    var rawData = fs.readFileSync('./src/data/testCampaigns.json');
-
-    var testData = JSON.parse(rawData);
-
-    res.status( HTTP_STATUS_OK )
-       .send( testData );
-} );*/
 
 app.get( '/campaigns', (req, res) => {
     const context = createContext( dbConnectionString );
