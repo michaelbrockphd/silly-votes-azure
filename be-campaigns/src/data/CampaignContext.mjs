@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-import CampaignSchema from './CampaignSchema.js';
+import CampaignSchema from './CampaignSchema.mjs';
 
 const createContext = (connectionString) => {
     const connectionOptions = { useNewUrlParser: true };

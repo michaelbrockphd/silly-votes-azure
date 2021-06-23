@@ -1,8 +1,8 @@
 import cors from 'cors';
 import express from 'express';
 
-import createAuthProxy from './proxies/AuthorizationProxy.js';
-import createCampaignProxy from './proxies/CampaignProxy.js';
+import createAuthProxy from './proxies/AuthorizationProxy.mjs';
+import createCampaignProxy from './proxies/CampaignProxy.mjs';
 
 const app = express();
 const port = process.env.FE_WEB_API_PORT || 9000;

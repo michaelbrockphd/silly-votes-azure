@@ -1,6 +1,6 @@
 import express from 'express';
 
-import createContext from './data/CampaignContext.js';
+import createContext from './data/CampaignContext.mjs';
 
 const app = express();
 const port = process.env.BE_CAMPAIGNS_PORT || 9002;

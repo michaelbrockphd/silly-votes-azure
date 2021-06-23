@@ -8,4 +8,4 @@ COPY src ./src/
 
 RUN npm install
 
-CMD ["node", "src/index.js"]
+CMD ["node", "src/index.mjs"]
