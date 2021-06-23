@@ -24,7 +24,7 @@ services:
             - net-pub
 
     be-auth:
-        environment: :
+        environment:
             - JWT_SECRET=gakushuufukurou
             
         build:

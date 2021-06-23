@@ -1,11 +1,14 @@
 import express from 'express';
 
-import createContext from './data/CampaignContext.mjs';
+//import createContext from './data/CampaignContext.mjs';
+import {
+    createContextMiddleware,
+    preFetchUserCampaigns as getUserCampaigns } from './middleware/InitialDataMiddleware.mjs';
 
 const app = express();
 const port = process.env.BE_CAMPAIGNS_PORT || 9002;
 
-const dbConnectionString = process.env.DB_RO || 'mongodb://adent:earth@localhost:27017/sillyvotes';
+const roConnStr = process.env.DB_RO || 'mongodb://adent:earth@localhost:27017/sillyvotes';
 
 const HTTP_STATUS_OK = 200;
 const HTTP_SERVER_ERROR = 500;
@@ -21,7 +24,7 @@ app.use( express.urlencoded( { extended : true } ));
     Take the example in https://docs.microsoft.com/en-us/aspnet/core/tutorials/first-web-api?view=aspnetcore-5.0&tabs=visual-studio
     
     GET /campaigns - all campaigns.
-    GET /campaigns/:id - get matching campaign
+    GET /campaigns/:userId - get campaigns for the specified user.
     POST /campaigns - create a new campaign.
     PUT /campaigns/:id - update an existing campaign
     DELETE /campaigns/id - name says it all.
@@ -29,8 +32,16 @@ app.use( express.urlencoded( { extended : true } ));
     Based on my limited understanding, having the ID in put is OK as it means the body should only have the changes and not a whole object.
 */
 
-app.get( '/campaigns', (req, res) => {
-    const context = createContext( dbConnectionString );
+const setRoContext = createContextMiddleware( roConnStr );
+
+app.get( '/campaigns/:userId', setRoContext, getUserCampaigns, (req, res) => {
+    // Nothing much to do, other than just return the data.
+    res.status(200)
+       .send(req.existingData);
+} );
+
+app.get( '/campaigns', setRoContext, (req, res) => {
+    const context = req.dbContext;
 
     context.Campaigns
            .find({})

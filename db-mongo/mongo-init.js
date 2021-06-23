@@ -31,6 +31,7 @@ db.campaigns.insert(
         {
             title: 'Which direction?',
             poolSize: 100,
+            email: "welcome@example.com",
             choices:
             [
                 'Left',
@@ -40,6 +41,7 @@ db.campaigns.insert(
         {
             title: 'Which direction now?',
             poolSize: 75,
+            email: "bugs.bunny@example.com",
             choices:
             [
                 'Up',
@@ -49,6 +51,7 @@ db.campaigns.insert(
         {
             title: 'Pineapple on pizza?',
             poolSize: 511,
+            email: "chaos@example.com",
             choices:
             [
                 'Yes',
@@ -58,6 +61,7 @@ db.campaigns.insert(
         {
             title: 'Test Survey 1',
             poolSize: 10,
+            email: "ms@example.com",
             choices:
             [
                 'Choice 1',
