@@ -4,12 +4,22 @@ import express from 'express';
 import createAuthProxy from './proxies/AuthorizationProxy.mjs';
 import createCampaignProxy from './proxies/CampaignProxy.mjs';
 
-const app = express();
-const port = process.env.FE_WEB_API_PORT || 9000;
+// Constants
 
 const HTTP_STATUS_OK = 200;
 const HTTP_STATUS_TEA_POT = 418;
 const HTTP_STATUS_UNAUTHORIZED = 401;
+
+// Initialize from any environment variables first.
+
+const port = process.env.FE_WEB_API_PORT || 9000;
+
+const proxyUrlAuthorization = process.env.BE_AUTH_URL || 'http://localhost:9001';
+const proxyUrlCampaigns = process.env.BE_CAMPAIGNS_URL || 'http://localhost:9002';
+
+// Now, initialize the other variables/constants.
+
+const app = express();
 
 // Create and register cors
 
@@ -21,8 +31,8 @@ app.use( cors( corsConfig ) );
 
 // Create and register the proxies.
 
-app.use( createAuthProxy() );
-app.use( createCampaignProxy() );
+app.use( createAuthProxy( proxyUrlAuthorization ) );
+app.use( createCampaignProxy( proxyUrlCampaigns ) );
 
 // Register any local handles.
 

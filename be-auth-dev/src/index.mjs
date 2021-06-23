@@ -7,9 +7,7 @@ const port = process.env.BE_AUTH_DEV_PORT || 9001;
 const HTTP_STATUS_OK = 200;
 const HTTP_STATUS_FORBIDDEN = 403;
 
-// TODO: Make this a docker secret
-
-const secret = "gakushuu fukurou";
+const secret = process.env.JWT_SECRET;
 
 // Register the parsers.
 

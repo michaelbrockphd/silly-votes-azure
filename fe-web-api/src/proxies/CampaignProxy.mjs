@@ -1,14 +1,12 @@
 import { createProxyMiddleware } from 'http-proxy-middleware';
 
-export default function createCampaignProxy() {
-    const urlSvcCampaigns = process.env.BE_CAMPAIGNS_URL || 'http://localhost:9002';
-
+export default function createCampaignProxy( serviceUrl ) {
     const rtnProxy = createProxyMiddleware(
         ['/campaigns' ],
         {
-            target: urlSvcCampaigns
+            target: serviceUrl
         }
     );
 
-        return( rtnProxy );
+    return( rtnProxy );
 };
