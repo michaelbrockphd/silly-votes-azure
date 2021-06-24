@@ -1,6 +1,14 @@
+import { Fragment } from 'react';
+
+import UserCampaignsContainer from '../../containers/UserCampaignsContainer';
+
 const Profile = () => {
     return(
-        <h3>Profile</h3>
+        <Fragment>
+            <h3>Your Campaigns</h3>
+
+            <UserCampaignsContainer />
+        </Fragment>
     );
 };
 

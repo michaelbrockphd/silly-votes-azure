@@ -1,6 +1,6 @@
 export default function preFetchUserCampaigns(req, res, next) {
     if( req.dbContext ) {
-        const { userId } = req.userIdentity.email;
+        const userId = req.userIdentity.email;
 
         if( userId ) {
             req.dbContext

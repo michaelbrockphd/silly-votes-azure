@@ -21,7 +21,7 @@ app.use( express.urlencoded( { extended : true } ));
     Take the example in https://docs.microsoft.com/en-us/aspnet/core/tutorials/first-web-api?view=aspnetcore-5.0&tabs=visual-studio
     
     GET /campaigns - all campaigns.
-    GET /campaigns/:userId - get campaigns for the specified user.
+    GET /usercampaigns/ - get campaigns for the currently logged in user.
     POST /usercampaigns - create a new campaign.
     PUT /usercampaigns/:id - update an existing campaign
     DELETE /usercampaigns/id - name says it all.
@@ -38,14 +38,14 @@ app.get(
 );
 
 app.get(
-    '/usercampaigns/:userId',
+    '/usercampaigns/',
     setRoContext,
     mdlExtractUsrId,
     mdlPrefetchUsrCmpg,
     (req, res) => {
         // Nothing much to do, other than just return the data.
         res.status(200)
-        .send(req.existingData);
+           .send(req.existingData);
     }
 );
 

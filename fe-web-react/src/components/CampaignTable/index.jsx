@@ -11,7 +11,10 @@ export class CampaignTableLoading extends Component {
 
 export default class CampaignTable extends Component {
     render() {
-        const { campaigns } = this.props;
+        const {
+            canModify,
+            campaigns
+        } = this.props;
 
         return(
             <TableContainer component={Paper}>
@@ -22,6 +25,7 @@ export default class CampaignTable extends Component {
                             <TableCell align="center">Pool Size</TableCell>
                             <TableCell align="center">Choice 1</TableCell>
                             <TableCell align="center">Choice 2</TableCell>
+                            {canModify && <TableCell align="center">Commands</TableCell>}
                         </TableRow>
                     </TableHead>
 
@@ -32,6 +36,7 @@ export default class CampaignTable extends Component {
                                 <TableCell align="center">{c.poolSize}</TableCell>
                                 <TableCell align="center">{c.choices[0]}</TableCell>
                                 <TableCell align="center">{c.choices[1]}</TableCell>
+                                {canModify && <TableCell align="center">X</TableCell>}
                             </TableRow>
                         ))}
                     </TableBody>

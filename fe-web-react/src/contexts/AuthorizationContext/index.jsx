@@ -67,6 +67,12 @@ export function AuthorizationProvider( {children} ) {
 
     const [isLoggedIn, setIsLoggedIn] = useState(initial);
 
+    function getToken() {
+        const authHeaderVal = authStorage().getItem( 'authorization' );
+
+        return( authHeaderVal );
+    }
+
     async function login( userDetails ) {
         const reqData = {
             email: userDetails.email
@@ -113,6 +119,7 @@ export function AuthorizationProvider( {children} ) {
     const memoedValue = useMemo(
         () => ({
           isLoggedIn,
+          getToken,
           login,
           logout,
           currentUser

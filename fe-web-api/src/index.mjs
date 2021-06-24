@@ -1,6 +1,6 @@
 import cors from 'cors';
 import express from 'express';
-import jwt from 'express-jwt';
+import jwt from 'jsonwebtoken';
 
 import ProxyFactory from './proxies.mjs';
 
@@ -33,17 +33,22 @@ app.use( cors( corsConfig ) );
 
 // Prepare any common middleware.
 
-const verifyJwt = jwt({
-    secret: jwt_secret,
-    algorithms: ['RS256'],
-    requestProperty: 'userAuthorization'
-});
+const verifyJwt = (req, res, next) => {
+    const token = req.headers['authorization'];
+
+    if( token && jwt.verify(token, jwt_secret)) {
+        next();
+    }
+    else {
+        res.status(401).end();
+    }
+};
 
 // Create and register the proxies.
 
 app.use( ProxyFactory.createCampaignProxy( proxyUrlCampaigns ) );
+app.use( ProxyFactory.createAuthorizationProxy( proxyUrlAuthorization ) );
 
-app.use( verifyJwt, ProxyFactory.createAuthorizationProxy( proxyUrlAuthorization ) );
 app.use( verifyJwt, ProxyFactory.createUserCampaignProxy( proxyUrlCampaigns ) );
 
 // Register any local handles.
