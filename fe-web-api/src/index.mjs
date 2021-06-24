@@ -1,8 +1,7 @@
 import cors from 'cors';
 import express from 'express';
 
-import createAuthProxy from './proxies/AuthorizationProxy.mjs';
-import createCampaignProxy from './proxies/CampaignProxy.mjs';
+import ProxyFactory from './proxies.mjs';
 
 // Constants
 
@@ -29,10 +28,13 @@ const corsConfig = {
 
 app.use( cors( corsConfig ) );
 
+// Prepare any common middleware.
+
 // Create and register the proxies.
 
-app.use( createAuthProxy( proxyUrlAuthorization ) );
-app.use( createCampaignProxy( proxyUrlCampaigns ) );
+app.use( ProxyFactory.createAuthorizationProxy( proxyUrlAuthorization ) );
+app.use( ProxyFactory.createCampaignProxy( proxyUrlCampaigns ) );
+app.use( ProxyFactory.createUserCampaignProxy( proxyUrlCampaigns ) );
 
 // Register any local handles.
 

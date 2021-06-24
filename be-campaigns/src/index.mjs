@@ -25,16 +25,16 @@ app.use( express.urlencoded( { extended : true } ));
     
     GET /campaigns - all campaigns.
     GET /campaigns/:userId - get campaigns for the specified user.
-    POST /campaigns - create a new campaign.
-    PUT /campaigns/:id - update an existing campaign
-    DELETE /campaigns/id - name says it all.
+    POST /usercampaigns - create a new campaign.
+    PUT /usercampaigns/:id - update an existing campaign
+    DELETE /usercampaigns/id - name says it all.
 
     Based on my limited understanding, having the ID in put is OK as it means the body should only have the changes and not a whole object.
 */
 
 const setRoContext = createContextMiddleware( roConnStr );
 
-app.get( '/campaigns/:userId', setRoContext, getUserCampaigns, (req, res) => {
+app.get( '/usercampaigns/:userId', setRoContext, getUserCampaigns, (req, res) => {
     // Nothing much to do, other than just return the data.
     res.status(200)
        .send(req.existingData);
