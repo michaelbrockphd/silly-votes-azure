@@ -57,6 +57,7 @@ services:
 
     fe-web-api:
         environment:
+            - JWT_SECRET=gakushuufukurou
             - BE_AUTH_URL=http://be-auth:9001
             - BE_CAMPAIGNS_URL=http://be-campaigns:9002
 

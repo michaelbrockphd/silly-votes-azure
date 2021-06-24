@@ -37,8 +37,6 @@ import {
     useState
 } from 'react';
 
-const LOCAL_HEADER_NAME_AUTH = "sv-auth-token";
-
 const authStorage = () => {
     return sessionStorage;
 };
@@ -46,7 +44,7 @@ const authStorage = () => {
 const getInitialState = () => {
     var rtnIsLoggedIn = false;
 
-    const token = authStorage().getItem( LOCAL_HEADER_NAME_AUTH );
+    const token = authStorage().getItem( 'authorization' );
 
     if(token) {
         const decoded = jwt.decode(token);
@@ -87,7 +85,7 @@ export function AuthorizationProvider( {children} ) {
                 if( authHeaderVal ) {
                     console.log( `authHead: ${authHeaderVal}` );
 
-                    authStorage().setItem( LOCAL_HEADER_NAME_AUTH, authHeaderVal );
+                    authStorage().setItem( 'authorization', authHeaderVal );
 
                     setIsLoggedIn(true);
                 }
@@ -101,7 +99,7 @@ export function AuthorizationProvider( {children} ) {
     };
     
     async function logout() {
-        authStorage().removeItem( LOCAL_HEADER_NAME_AUTH );
+        authStorage().removeItem( 'authorization' );
 
         setIsLoggedIn(false);
     };
@@ -110,10 +108,6 @@ export function AuthorizationProvider( {children} ) {
         return({
             email: "email@example.com"
         });
-    };
-
-    function getToken() {
-        return authStorage().getItem( "authed" );
     };
 
     const memoedValue = useMemo(

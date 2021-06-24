@@ -1,5 +1,6 @@
 import cors from 'cors';
 import express from 'express';
+import jwt from 'express-jwt';
 
 import ProxyFactory from './proxies.mjs';
 
@@ -12,6 +13,8 @@ const HTTP_STATUS_UNAUTHORIZED = 401;
 // Initialize from any environment variables first.
 
 const port = process.env.FE_WEB_API_PORT || 9000;
+
+const jwt_secret = process.env.JWT_SECRET;
 
 const proxyUrlAuthorization = process.env.BE_AUTH_URL || 'http://localhost:9001';
 const proxyUrlCampaigns = process.env.BE_CAMPAIGNS_URL || 'http://localhost:9002';
@@ -30,11 +33,18 @@ app.use( cors( corsConfig ) );
 
 // Prepare any common middleware.
 
+const verifyJwt = jwt({
+    secret: jwt_secret,
+    algorithms: ['RS256'],
+    requestProperty: 'userAuthorization'
+});
+
 // Create and register the proxies.
 
-app.use( ProxyFactory.createAuthorizationProxy( proxyUrlAuthorization ) );
 app.use( ProxyFactory.createCampaignProxy( proxyUrlCampaigns ) );
-app.use( ProxyFactory.createUserCampaignProxy( proxyUrlCampaigns ) );
+
+app.use( verifyJwt, ProxyFactory.createAuthorizationProxy( proxyUrlAuthorization ) );
+app.use( verifyJwt, ProxyFactory.createUserCampaignProxy( proxyUrlCampaigns ) );
 
 // Register any local handles.
 
