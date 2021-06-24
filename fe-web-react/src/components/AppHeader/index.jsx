@@ -11,7 +11,9 @@ export default function AppHeader() {
     return(
         <AppBar position="static">
             <Toolbar>
-                <Typography className={appHeaderStyles.companyTitle}>Silly Votes</Typography>
+                <Typography variant="h4" className={appHeaderStyles.companyTitle}>
+                    <Link className={appHeaderStyles.companyTitleLink} href="/campaigns">Silly Votes</Link>
+                </Typography>
                 
                 {isLoggedIn &&
                     <Fragment>

@@ -22,13 +22,30 @@ const UserCampaignsContainer = (props) => {
               });
     });
 
+    const addCampaign = () => {
+        alert( "add campaign" );
+    };
+
+    const editCampaign = (campaign) => {
+        alert( "Sorry, not implemented yet." );
+    };
+
+    const deleteCampaign = (campaign) => {
+        alert( "delete campaign" );
+    };
+
     return(
         <Fragment>
             {isLoading && 
                 <CampaignTableLoading />}
 
             {!isLoading &&
-                <CampaignTable campaigns={campaigns} canModify={true} />}
+                <CampaignTable
+                    campaigns={campaigns}
+                    canModify={true}
+                    addCampaign={addCampaign}
+                    editCampaign={editCampaign}
+                    deleteCampaign={deleteCampaign} />}
         </Fragment>
     );
 };
