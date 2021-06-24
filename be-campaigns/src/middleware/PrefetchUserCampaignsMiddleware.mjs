@@ -1,28 +1,6 @@
-import createContext from '../data/CampaignContext.mjs';
-
-export function createContextMiddleware( roConnectionString ) {
-    const rtnMiddleware = (req, res, next) => {
-        try
-        {
-            const context = createContext( roConnectionString );
-    
-            req.dbContext = context;
-    
-            next();
-        }
-        catch
-        {
-            res.status(500)
-               .send("Could not get required context.");
-        }
-    };
-
-    return( rtnMiddleware );
-}
-
-export function preFetchUserCampaigns(req, res, next) {
+export default function preFetchUserCampaigns(req, res, next) {
     if( req.dbContext ) {
-        const { userId } = req.params;
+        const { userId } = req.userIdentity.email;
 
         if( userId ) {
             req.dbContext
