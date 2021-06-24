@@ -41,7 +41,7 @@ db.campaigns.insert(
         {
             title: 'Which direction now?',
             poolSize: 75,
-            email: "bugs.bunny@example.com",
+            email: "welcome@example.com",
             choices:
             [
                 'Up',
