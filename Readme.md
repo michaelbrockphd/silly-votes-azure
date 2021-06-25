@@ -31,4 +31,4 @@ Technically, this is more a list of containers but when given a network connecti
 
 Admittedly, this requires ALOT of improvement.  At the time of writing, it simply allows a hassle three way of creating a JWT token with just a email address (which acts as the user identifier for the rest of the system).
 
-In future, it maybe extended to actually require a email AND password but for now, it is there to simply prove a token the other microservices for authentication purposes.
+In future, it maybe extended to actually require a email AND password but for now, it is there to simply provide a token the other microservices for authentication purposes.
