@@ -44,6 +44,21 @@ class WebApi {
         return( axios( parameters ) );
     }
 
+    deleteUserCampaign(authToken, campaign) {
+        const reqHeaders = {
+            Authorization: authToken
+        };
+
+        const parameters = {
+            method: 'delete',
+            url: `${baseUrl}/usercampaigns/${campaign._id}`,
+            headers: reqHeaders,
+            data: campaign
+        };
+
+        return( axios( parameters ) );
+    }
+
     getUserCampaigns(authToken) {
         const reqHeaders = {
             Authorization: authToken

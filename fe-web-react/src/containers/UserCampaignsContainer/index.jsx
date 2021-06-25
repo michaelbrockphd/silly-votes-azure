@@ -67,16 +67,26 @@ const UserCampaignsContainer = (props) => {
     };
 
     const deleteCampaign = (campaign) => {
-        dispatch({
-            type: Actions.REMOVE_CAMPAIGN,
-            value: campaign
-        });
+        dispatch({ type: Actions.REMOVE_CAMPAIGN_INIT });
+
+        WebApi.deleteUserCampaign( token, campaign )
+              .then((response) => {
+                  dispatch({
+                      type: Actions.REMOVE_CAMPAIGN_SUCCESS,
+                      value: campaign
+                  });
+              })
+              .catch((err) => {
+                  alert( "Save failed." );
+
+                  console.log(err);
+
+                  dispatch({ type: Actions.REMOVE_CAMPAIGN_FAIL });
+              });
     };
 
     const closeDetails = () => {
-        dispatch({
-            type: Actions.CLOSE_DETAILS
-        });
+        dispatch({ type: Actions.CLOSE_DETAILS });
     };
 
     const saveDetails = (data) => {
