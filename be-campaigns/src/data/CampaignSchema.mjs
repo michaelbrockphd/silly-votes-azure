@@ -5,7 +5,8 @@ const CampaignSchema = {
         {
             title: String,
             poolSize: Number,
-            choices: [String]
+            choices: [String],
+            email: String
         }
     ),
     name: 'Campaign'

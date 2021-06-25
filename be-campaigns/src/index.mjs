@@ -1,14 +1,17 @@
 import express from 'express';
 
-import { ReadAllHandle as hdlCampaigns } from './handles/CampaignHandles.mjs';
+import {
+    CreateCampaignHandle as hdlCreate,
+    ReadAllHandle as hdlCampaigns } from './handles/CampaignHandles.mjs';
 import mdlExtractUsrId from './middleware/ExtractUserIdentificationMiddleware.mjs';
 import mdlPrefetchUsrCmpg from './middleware/PrefetchUserCampaignsMiddleware.mjs';
-import mdlReadOnlyCtx from './middleware/ReadOnlyContextMiddleware.mjs';
+import createDbCtxMdl from './middleware/ReadOnlyContextMiddleware.mjs';
 
 const app = express();
 const port = process.env.BE_CAMPAIGNS_PORT || 9002;
 
 const roConnStr = process.env.DB_RO || 'mongodb://adent:earth@localhost:27017/sillyvotes';
+const rwConnStr = process.env.DB_RW || 'mongodb://fprefect:galaxy@localhost:27017/sillyvotes';
 
 app.use( express.json() );
 app.use( express.urlencoded( { extended : true } ));
@@ -24,22 +27,23 @@ app.use( express.urlencoded( { extended : true } ));
     GET /usercampaigns/ - get campaigns for the currently logged in user.
     POST /usercampaigns - create a new campaign.
     PUT /usercampaigns/:id - update an existing campaign
-    DELETE /usercampaigns/id - name says it all.
+    DELETE /usercampaigns/:id - name says it all.
 
     Based on my limited understanding, having the ID in put is OK as it means the body should only have the changes and not a whole object.
 */
 
-const setRoContext = mdlReadOnlyCtx( roConnStr );
+const mdlSetRoContext = createDbCtxMdl( roConnStr );
+const mdlSetRwContext = createDbCtxMdl( rwConnStr );
 
 app.get(
     '/campaigns',
-    setRoContext,
+    mdlSetRoContext,
     hdlCampaigns
 );
 
 app.get(
     '/usercampaigns/',
-    setRoContext,
+    mdlSetRoContext,
     mdlExtractUsrId,
     mdlPrefetchUsrCmpg,
     (req, res) => {
@@ -47,6 +51,13 @@ app.get(
         res.status(200)
            .send(req.existingData);
     }
+);
+
+app.post(
+    '/usercampaigns',
+    mdlSetRwContext,
+    mdlExtractUsrId,
+    hdlCreate
 );
 
 // Listen on the required port.

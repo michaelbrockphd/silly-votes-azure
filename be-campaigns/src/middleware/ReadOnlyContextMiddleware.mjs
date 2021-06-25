@@ -1,10 +1,10 @@
 import createContext from '../data/CampaignContext.mjs';
 
-export default function createContextMiddleware( roConnectionString ) {
+export default function createContextMiddleware( connectionString ) {
     const rtnMiddleware = (req, res, next) => {
         try
         {
-            const context = createContext( roConnectionString );
+            const context = createContext( connectionString );
     
             req.dbContext = context;
     
