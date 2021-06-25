@@ -42,6 +42,7 @@ services:
     be-campaigns:
         environment:
             - DB_RO=mongodb://adent:earth@db:27017/sillyvotes
+            - DB_RW=mongodb://fprefect:galaxy@db:27017/sillyvotes
 
         build:
             context: ./be-campaigns

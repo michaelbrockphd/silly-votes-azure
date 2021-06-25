@@ -2,37 +2,23 @@ import Actions from './Actions.mjs';
 
 // Individual reducers for more complex actions.
 
-const reduceAddCampaignDetail = (state, campaign) => {
-    var fresh = {
-        _id: -1,
-        title: null,
-        poolSize: 0,
-        choices: ['','']
-    };
-
+const reduceAddCampaign = (state, target) => {
     var rtn = {
         ...state,
         isEditingDetails: false,
-        campaignDetails: fresh,
+        campaignDetails: target.value,
         showCampaignDetails: true
     };
 
     return( rtn );
 };
 
-const reduceCampaignRemoval = (campaigns, target) => {
-    // TODO: Update the WebApi class to actually call the microservice.
-    const rtn = campaigns.filter( c => c._id !== target._id );
-
-    return( rtn );
-};
-
-const reduceEditCampaignDetail = (state, campaign) => {
+const reduceEditCampaign = (state, target) => {
     // Note: if a deep clone is needed, it is suggested to simply serialize and deserialize via JSON.
     //
     // https://stackoverflow.com/questions/122102/what-is-the-most-efficient-way-to-deep-clone-an-object-in-javascript/122704#122704
 
-    var clone = { ...campaign };
+    var clone = { ...target.value };
 
     var rtn = {
         ...state,
@@ -44,10 +30,23 @@ const reduceEditCampaignDetail = (state, campaign) => {
     return( rtn );
 };
 
-const reduceSaveCampaignDetail = (state, campaign) => {
-    alert( "Sorry, not implemented yet, :(");
+const reduceRemoveCampaignSuccess = (state, target) => {
+    const modifiedCampaigns = state.campaigns.filter( c => c._id !== target.value._id );
 
-    var rtn = {...state, showCampaignDetails: false};
+    const rtn = {...state, campaigns: modifiedCampaigns};
+
+    return( rtn );
+};
+
+const reduceSaveCampaignSuccess = (state, target) => {
+    var updatedCampaigns = [ ...state.campaigns, target.value ];
+
+    var rtn = {
+        ...state,
+        campaigns: updatedCampaigns,
+        showCampaignDetails: false,
+        isBusy: false
+    };
 
     return(rtn);
 };
@@ -57,10 +56,7 @@ const reduceSaveCampaignDetail = (state, campaign) => {
 const reducer = (state, action) => {
     switch(action.type) {
         case Actions.ADD_CAMPAIGN:
-            return reduceAddCampaignDetail(state);
-
-        case Actions.CHANGE_LOADING:
-            return { ...state, isLoading: action.value };
+            return reduceAddCampaign(state, action);
 
         case Actions.CHANGE_CAMPAIGNS:
             return { ...state, campaigns: action.value };
@@ -69,13 +65,28 @@ const reducer = (state, action) => {
             return { ...state, showCampaignDetails: false };
 
         case Actions.EDIT_CAMPAIGN:
-            return reduceEditCampaignDetail(state, action.value);
+            return reduceEditCampaign(state, action);
 
-        case Actions.REMOVE_CAMPAIGN:
-            return { ...state, campaigns: reduceCampaignRemoval(state.campaigns, action.value) };
+        case Actions.INIT_FINISHED:
+            return { ...state, isLoading: false, campaigns: action.value };
 
-        case Actions.SAVE_CAMPAIGN:
-            return reduceSaveCampaignDetail(state, action.value);
+        case Actions.REMOVE_CAMPAIGN_FAIL:
+            return { ...state, isBusy: false };
+
+        case Actions.REMOVE_CAMPAIGN_INIT:
+            return { ...state, isBusy: true };
+
+        case Actions.REMOVE_CAMPAIGN_SUCCESS:
+            return reduceRemoveCampaignSuccess(state, action);
+
+        case Actions.SAVE_CAMPAIGN_FAIL:
+            return { ...state, isBusy: false };
+
+        case Actions.SAVE_CAMPAIGN_INIT:
+            return { ...state, isBusy: true };
+
+        case Actions.SAVE_CAMPAIGN_SUCCESS:
+            return reduceSaveCampaignSuccess(state, action);
 
         default:
             throw new Error( `${action.type} is not a recognised action.` );

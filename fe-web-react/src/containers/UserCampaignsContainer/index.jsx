@@ -36,13 +36,8 @@ const UserCampaignsContainer = (props) => {
         WebApi.getUserCampaigns( token )
               .then((response) => {
                     dispatch({
-                        type: Actions.CHANGE_CAMPAIGNS,
+                        type: Actions.INIT_FINISHED,
                         value: response.data
-                    });
-
-                    dispatch({
-                        type: Actions.CHANGE_LOADING,
-                        value: false
                     });
               })
               .catch((err) => {
@@ -51,8 +46,16 @@ const UserCampaignsContainer = (props) => {
     }, []);
 
     const addCampaign = () => {
+        var fresh = {
+            _id: -1,
+            title: '',
+            poolSize: 0,
+            choices: ['','']
+        };
+
         dispatch({
-            type: Actions.ADD_CAMPAIGN
+            type: Actions.ADD_CAMPAIGN,
+            value: fresh
         });
     };
 
@@ -76,11 +79,25 @@ const UserCampaignsContainer = (props) => {
         });
     };
 
-    const saveDetails = () => {
-        dispatch({
-            type: Actions.SAVE_CAMPAIGN,
-            value: campaignDetails
-        });
+    const saveDetails = (data) => {
+        dispatch({ type: Actions.SAVE_CAMPAIGN_INIT });
+
+        const method = isEditingDetails ? 'updateUserCampaign' : 'addUserCampaign';
+
+        (WebApi[method])( token, data )
+              .then((response) => {
+                  dispatch({
+                      type: Actions.SAVE_CAMPAIGN_SUCCESS,
+                      value: response.data
+                  });
+              })
+              .catch((err) => {
+                  alert( "Save failed." );
+
+                  console.log(err);
+
+                  dispatch({ type: Actions.SAVE_CAMPAIGN_FAIL });
+              });
     };
 
     return(

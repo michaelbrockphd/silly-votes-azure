@@ -29,6 +29,21 @@ class WebApi {
         return( axios( parameters ) );
     }
 
+    addUserCampaign(authToken, freshCampaign) {
+        const reqHeaders = {
+            Authorization: authToken
+        };
+
+        const parameters = {
+            method: 'post',
+            url: `${baseUrl}/usercampaigns`,
+            headers: reqHeaders,
+            data: freshCampaign
+        };
+
+        return( axios( parameters ) );
+    }
+
     getUserCampaigns(authToken) {
         const reqHeaders = {
             Authorization: authToken
