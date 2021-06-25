@@ -3,7 +3,8 @@ import express from 'express';
 import {
     CreateCampaignHandle as hdlCreate,
     DeleteUserCampaignHandle as hdlDelete,
-    ReadAllHandle as hdlCampaigns } from './handles/CampaignHandles.mjs';
+    ReadAllHandle as hdlCampaigns,
+    UpdateUserCampaignHandle as hdlUpdate } from './handles/CampaignHandles.mjs';
 import mdlExtractUsrId from './middleware/ExtractUserIdentificationMiddleware.mjs';
 import mdlPrefetchUsrCmpg from './middleware/PrefetchUserCampaignsMiddleware.mjs';
 import createDbCtxMdl from './middleware/ReadOnlyContextMiddleware.mjs';
@@ -61,7 +62,12 @@ app.post(
     hdlCreate
 );
 
-//PUT /usercampaigns/:id - update an existing campaign
+app.put(
+    '/usercampaigns/:id',
+    mdlExtractUsrId,
+    mdlSetRwContext,
+    hdlUpdate
+);
 
 app.delete(
     '/usercampaigns/:id',
