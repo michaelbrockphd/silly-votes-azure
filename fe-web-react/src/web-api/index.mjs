@@ -57,6 +57,21 @@ class WebApi {
 
         return( axios( parameters ) );
     }
+
+    updateUserCampaign(authToken, updateCampaign) {
+        const reqHeaders = {
+            Authorization: authToken
+        };
+
+        const parameters = {
+            method: 'put',
+            url: `${baseUrl}/usercampaigns/${updateCampaign._id}`,
+            headers: reqHeaders,
+            data: updateCampaign
+        };
+
+        return( axios( parameters ) );
+    }
 }
 
 export default new WebApi();

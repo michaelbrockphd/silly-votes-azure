@@ -39,11 +39,32 @@ const reduceRemoveCampaignSuccess = (state, target) => {
 };
 
 const reduceSaveCampaignSuccess = (state, target) => {
-    var updatedCampaigns = [ ...state.campaigns, target.value ];
+    const campaign = target.value;
+
+    var updatedCampaigns = [ ...state.campaigns, campaign ];
 
     var rtn = {
         ...state,
         campaigns: updatedCampaigns,
+        showCampaignDetails: false,
+        isBusy: false
+    };
+
+    return(rtn);
+};
+
+const reduceUpdateCampaignSuccess = (state, target) => {
+    const campaign = target.value;
+
+    var original = state.campaigns
+                        .filter( c => c._id === campaign._id )[ 0 ];
+
+    original.title = campaign.title;
+    original.poolSize = campaign.poolSize;
+    original.choices = campaign.choices;
+
+    var rtn = {
+        ...state,
         showCampaignDetails: false,
         isBusy: false
     };
@@ -87,6 +108,15 @@ const reducer = (state, action) => {
 
         case Actions.SAVE_CAMPAIGN_SUCCESS:
             return reduceSaveCampaignSuccess(state, action);
+
+        case Actions.UPDATE_CAMPAIGN_FAIL:
+            return { ...state, isBusy: false };
+
+        case Actions.UPDATE_CAMPAIGN_INIT:
+            return { ...state, isBusy: true };
+
+        case Actions.UPDATE_CAMPAIGN_SUCCESS:
+            return reduceUpdateCampaignSuccess(state, action);
 
         default:
             throw new Error( `${action.type} is not a recognised action.` );

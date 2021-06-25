@@ -47,7 +47,7 @@ const UserCampaignsContainer = (props) => {
 
     const addCampaign = () => {
         var fresh = {
-            _id: -1,
+            _id: null,
             title: '',
             poolSize: 0,
             choices: ['','']
@@ -82,9 +82,7 @@ const UserCampaignsContainer = (props) => {
     const saveDetails = (data) => {
         dispatch({ type: Actions.SAVE_CAMPAIGN_INIT });
 
-        const method = isEditingDetails ? 'updateUserCampaign' : 'addUserCampaign';
-
-        (WebApi[method])( token, data )
+        WebApi.addUserCampaign( token, data )
               .then((response) => {
                   dispatch({
                       type: Actions.SAVE_CAMPAIGN_SUCCESS,
@@ -97,6 +95,25 @@ const UserCampaignsContainer = (props) => {
                   console.log(err);
 
                   dispatch({ type: Actions.SAVE_CAMPAIGN_FAIL });
+              });
+    };
+
+    const updateDetails = (data) => {
+        dispatch({ type: Actions.UPDATE_CAMPAIGN_INIT });
+
+        WebApi.updateUserCampaign( token, data )
+              .then((response) => {
+                  dispatch({
+                      type: Actions.UPDATE_CAMPAIGN_SUCCESS,
+                      value: data
+                  });
+              })
+              .catch((err) => {
+                  alert( "Update failed." );
+
+                  console.log(err);
+
+                  dispatch({ type: Actions.UPDATE_CAMPAIGN_FAIL });
               });
     };
 
@@ -119,7 +136,7 @@ const UserCampaignsContainer = (props) => {
                 isEditing={isEditingDetails}
                 onClose={closeDetails}
                 onCancel={closeDetails}
-                onConfirm={saveDetails} />
+                onConfirm={isEditingDetails ? updateDetails : saveDetails} />
         </Fragment>
     );
 };
