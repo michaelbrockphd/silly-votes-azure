@@ -32,6 +32,35 @@ const CreateCampaignHandle = (req, res) => {
     }
 };
 
+const DeleteUserCampaignHandle = (req, res) => {
+    const userEmail = req.userIdentity.email;
+
+    const campaignId = req.params.id;
+
+    if(!!campaignId && !!userEmail) {
+        const cntx = req.dbContext;
+
+        cntx.Campaigns
+            .remove( { _id: campaignId, email: userEmail } )
+            .then( (_) => {
+                res.status(StatusCodes.OK)
+                   .send( "Delete complete" );
+            } )
+            .catch( (err) => {
+                // The only time when an error is reported back to the client.
+                console.log(err);
+
+                res.status(StatusCodes.INTERNAL_SERVER_ERROR)
+                   .send( "Delete failed." );
+            } );
+    }
+    else {
+        // If we have missing parameters, just return.
+        res.status(StatusCodes.OK)
+           .send( "Delete complete" );
+    }
+};
+
 const ReadAllHandle = (req, res) => {
     const context = req.dbContext;
 
@@ -51,5 +80,6 @@ const ReadAllHandle = (req, res) => {
 
 export {
     CreateCampaignHandle,
+    DeleteUserCampaignHandle,
     ReadAllHandle
 };

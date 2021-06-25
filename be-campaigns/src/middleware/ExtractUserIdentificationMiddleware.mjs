@@ -20,7 +20,6 @@ export default function extractUserIdentification(req, res, next) {
     }
 
     if( req.userIdentity ) {
-        console.log( "next step..." );
         next();
     }
     else {

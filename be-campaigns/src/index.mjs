@@ -2,6 +2,7 @@ import express from 'express';
 
 import {
     CreateCampaignHandle as hdlCreate,
+    DeleteUserCampaignHandle as hdlDelete,
     ReadAllHandle as hdlCampaigns } from './handles/CampaignHandles.mjs';
 import mdlExtractUsrId from './middleware/ExtractUserIdentificationMiddleware.mjs';
 import mdlPrefetchUsrCmpg from './middleware/PrefetchUserCampaignsMiddleware.mjs';
@@ -43,8 +44,8 @@ app.get(
 
 app.get(
     '/usercampaigns/',
-    mdlSetRoContext,
     mdlExtractUsrId,
+    mdlSetRoContext,
     mdlPrefetchUsrCmpg,
     (req, res) => {
         // Nothing much to do, other than just return the data.
@@ -55,9 +56,18 @@ app.get(
 
 app.post(
     '/usercampaigns',
-    mdlSetRwContext,
     mdlExtractUsrId,
+    mdlSetRwContext,
     hdlCreate
+);
+
+//PUT /usercampaigns/:id - update an existing campaign
+
+app.delete(
+    '/usercampaigns/:id',
+    mdlExtractUsrId,
+    mdlSetRwContext,
+    hdlDelete
 );
 
 // Listen on the required port.

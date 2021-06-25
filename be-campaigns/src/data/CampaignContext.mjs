@@ -5,10 +5,10 @@ import CampaignSchema from './CampaignSchema.mjs';
 const createContext = (connectionString) => {
     const connectionOptions = { useNewUrlParser: true };
 
-    mongoose.connect(connectionString, connectionOptions);
+    const connection = mongoose.createConnection(connectionString, connectionOptions);
 
     return( {
-        Campaigns: mongoose.model(CampaignSchema.name, CampaignSchema.schema)
+        Campaigns: connection.model(CampaignSchema.name, CampaignSchema.schema)
     } );
 };
 
