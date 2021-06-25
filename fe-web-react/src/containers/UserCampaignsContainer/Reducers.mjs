@@ -2,13 +2,6 @@ import Actions from './Actions.mjs';
 
 // Individual reducers for more complex actions.
 
-const reduceCampaignRemoval = (campaigns, target) => {
-    // TODO: Update the WebApi class to actually call the microservice.
-    const rtn = campaigns.filter( c => c._id !== target._id );
-
-    return( rtn );
-};
-
 const reduceAddCampaignDetail = (state, campaign) => {
     var fresh = {
         _id: -1,
@@ -23,6 +16,13 @@ const reduceAddCampaignDetail = (state, campaign) => {
         campaignDetails: fresh,
         showCampaignDetails: true
     };
+
+    return( rtn );
+};
+
+const reduceCampaignRemoval = (campaigns, target) => {
+    // TODO: Update the WebApi class to actually call the microservice.
+    const rtn = campaigns.filter( c => c._id !== target._id );
 
     return( rtn );
 };
@@ -42,6 +42,14 @@ const reduceEditCampaignDetail = (state, campaign) => {
     };
 
     return( rtn );
+};
+
+const reduceSaveCampaignDetail = (state, campaign) => {
+    alert( "Sorry, not implemented yet, :(");
+
+    var rtn = {...state, showCampaignDetails: false};
+
+    return(rtn);
 };
 
 // The main reducer.
@@ -65,6 +73,9 @@ const reducer = (state, action) => {
 
         case Actions.REMOVE_CAMPAIGN:
             return { ...state, campaigns: reduceCampaignRemoval(state.campaigns, action.value) };
+
+        case Actions.SAVE_CAMPAIGN:
+            return reduceSaveCampaignDetail(state, action.value);
 
         default:
             throw new Error( `${action.type} is not a recognised action.` );

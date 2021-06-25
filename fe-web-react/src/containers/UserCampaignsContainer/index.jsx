@@ -12,6 +12,7 @@ import WebApi from '../../web-api';
 
 const initialState = {
     isLoading: true,
+    isBusy: false,
     campaigns: [],
     showCampaignDetails: false,
     isEditingDetails: false,
@@ -21,6 +22,7 @@ const initialState = {
 const UserCampaignsContainer = (props) => {
     const [{
         isLoading,
+        isBusy,
         campaigns,
         showCampaignDetails,
         isEditingDetails,
@@ -74,6 +76,13 @@ const UserCampaignsContainer = (props) => {
         });
     };
 
+    const saveDetails = () => {
+        dispatch({
+            type: Actions.SAVE_CAMPAIGN,
+            value: campaignDetails
+        });
+    };
+
     return(
         <Fragment>
             {isLoading && 
@@ -92,7 +101,8 @@ const UserCampaignsContainer = (props) => {
                 isOpen={showCampaignDetails}
                 isEditing={isEditingDetails}
                 onClose={closeDetails}
-                onCancel={closeDetails} />
+                onCancel={closeDetails}
+                onConfirm={saveDetails} />
         </Fragment>
     );
 };
