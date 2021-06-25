@@ -20,19 +20,7 @@ app.use( express.urlencoded( { extended : true } ));
 
 // Register the local handles.
 //
-// TODO: Decide if keeping '/campaigns' holds any value.
-
-/*
-    Take the example in https://docs.microsoft.com/en-us/aspnet/core/tutorials/first-web-api?view=aspnetcore-5.0&tabs=visual-studio
-    
-    GET /campaigns - all campaigns.
-    GET /usercampaigns/ - get campaigns for the currently logged in user.
-    POST /usercampaigns - create a new campaign.
-    PUT /usercampaigns/:id - update an existing campaign
-    DELETE /usercampaigns/:id - name says it all.
-
-    Based on my limited understanding, having the ID in put is OK as it means the body should only have the changes and not a whole object.
-*/
+// Based on https://docs.microsoft.com/en-us/aspnet/core/tutorials/first-web-api?view=aspnetcore-5.0&tabs=visual-studio
 
 const mdlSetRoContext = createDbCtxMdl( roConnStr );
 const mdlSetRwContext = createDbCtxMdl( rwConnStr );
