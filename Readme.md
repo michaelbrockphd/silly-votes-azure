@@ -27,8 +27,8 @@ Technically, this is more a list of containers but when given a network connecti
 |fe-web-api|What passes for a reverse proxy and effective collates the API of all other services behind it|Y|
 |fe-web-react|The actual front end that users via a browser see.  As the name implies, it is written in React.|Y|
 
-## Authentication notes
+## Authentication Notes
 
-Admittedly, this requires ALOT of improvement.  At the time of writing, it simply allows a hassle three way of creating a JWT token with just a email address (which acts as the user identifier for the rest of the system).
+Admittedly, this requires ALOT of improvement.  At the time of writing, it simply allows a hassle free way of creating a JWT token with just a email address (which acts as the user identifier for the rest of the system).
 
 In future, it maybe extended to actually require a email AND password but for now, it is there to simply provide a token the other microservices for authentication purposes.
