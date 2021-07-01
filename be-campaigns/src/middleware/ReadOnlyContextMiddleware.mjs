@@ -1,17 +1,19 @@
 import createContext from '../data/CampaignContext.mjs';
 
-export default function createContextMiddleware( connectionString ) {
+export default function createContextMiddleware( options ) {
     const rtnMiddleware = (req, res, next) => {
         try
         {
-            const context = createContext( connectionString );
+            const context = createContext( options );
     
             req.dbContext = context;
     
             next();
         }
-        catch
+        catch(err)
         {
+            console.log(err);
+
             res.status(500)
                .send("Could not get required context.");
         }

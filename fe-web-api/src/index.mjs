@@ -1,23 +1,19 @@
 import cors from 'cors';
 import express from 'express';
-import jwt from 'jsonwebtoken';
 
+import {
+        initialize,
+        VerifyJwtMiddleware as mdlVerifyJwt
+    } from './middleware.mjs';
 import ProxyFactory from './proxies.mjs';
-
-// Constants
-
-const HTTP_STATUS_OK = 200;
-const HTTP_STATUS_TEA_POT = 418;
-const HTTP_STATUS_UNAUTHORIZED = 401;
 
 // Initialize from any environment variables first.
 
 const port = process.env.FE_WEB_API_PORT || 9000;
 
-const jwt_secret = process.env.JWT_SECRET;
-
-const proxyUrlAuthorization = process.env.BE_AUTH_URL || 'http://localhost:9001';
 const proxyUrlCampaigns = process.env.BE_CAMPAIGNS_URL || 'http://localhost:9002';
+
+initialize( process.env.AUTH_URI );
 
 // Now, initialize the other variables/constants.
 
@@ -31,32 +27,14 @@ const corsConfig = {
 
 app.use( cors( corsConfig ) );
 
-// Prepare any common middleware.
-
-const verifyJwt = (req, res, next) => {
-    const token = req.headers['authorization'];
-
-    if( token && jwt.verify(token, jwt_secret)) {
-        next();
-    }
-    else {
-        res.status(401).end();
-    }
-};
-
 // Create and register the proxies.
 
 app.use( ProxyFactory.createCampaignProxy( proxyUrlCampaigns ) );
-app.use( ProxyFactory.createAuthorizationProxy( proxyUrlAuthorization ) );
 
-app.use( verifyJwt, ProxyFactory.createUserCampaignProxy( proxyUrlCampaigns ) );
-
-// Register any local handles.
-
-app.get( '/', (req, res) => {
-    res.status( HTTP_STATUS_TEA_POT )
-       .send( "Ask me nicely and I may brew coffee" );
-} );
+app.use(
+    mdlVerifyJwt,
+    ProxyFactory.createUserCampaignProxy( proxyUrlCampaigns )
+);
 
 // Finally, listen on the required port.
 

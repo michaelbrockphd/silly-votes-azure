@@ -3,23 +3,6 @@ import axios from 'axios';
 const baseUrl = process.env.FE_WEB_API_URL || 'http://localhost:9000';
 
 class WebApi {
-    /*getCampaigns() {
-        const subKey = 'dcbb0f5bdaf84f4e90023f2174373b5b';
-
-        const reqUrl = "/GetCampaigns?subscription-key="+ subKey;
-
-        return(
-            api({
-                method: "get",
-                url: reqUrl,
-                crossdomain: true,
-                headers: {
-                    Authorization: Auth.getToken()
-                }
-            })
-        );
-    }*/
-
     getCampaigns() {
         const parameters = {
             method: 'get',
@@ -51,7 +34,7 @@ class WebApi {
 
         const parameters = {
             method: 'delete',
-            url: `${baseUrl}/usercampaigns/${campaign._id}`,
+            url: `${baseUrl}/usercampaigns/${campaign.id}`,
             headers: reqHeaders,
             data: campaign
         };
@@ -80,7 +63,7 @@ class WebApi {
 
         const parameters = {
             method: 'put',
-            url: `${baseUrl}/usercampaigns/${updateCampaign._id}`,
+            url: `${baseUrl}/usercampaigns/${updateCampaign.id}`,
             headers: reqHeaders,
             data: updateCampaign
         };

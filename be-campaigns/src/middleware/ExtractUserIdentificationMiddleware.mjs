@@ -6,9 +6,9 @@ export default function extractUserIdentification(req, res, next) {
     if( token ) {
         const decoded = jwt.decode( token );
 
-        if( !!decoded && !!decoded.email ) {
+        if( !!decoded && !!decoded.emails ) {
             req.userIdentity = {
-                email: decoded.email
+                email: decoded.emails[0]
             };
         }
         else {

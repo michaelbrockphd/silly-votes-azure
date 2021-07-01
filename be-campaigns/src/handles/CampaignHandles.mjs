@@ -1,4 +1,3 @@
-import { request } from 'express';
 import { StatusCodes } from 'http-status-codes';
 
 const CreateCampaignHandle = (req, res) => {
@@ -6,8 +5,8 @@ const CreateCampaignHandle = (req, res) => {
 
     // If there is an ID field, cut it out.
 
-    if( freshCampaign._id ) {
-        delete( freshCampaign._id );
+    if( freshCampaign.id ) {
+        delete( freshCampaign.id );
     }
 
     if( freshCampaign ) {
@@ -15,7 +14,9 @@ const CreateCampaignHandle = (req, res) => {
 
         cntx.Campaigns
             .create( freshCampaign )
-            .then( ( created ) => {
+            .then( ( response ) => {
+                const {resource: created} = response;
+
                 res.status(StatusCodes.OK)
                    .send(created);
             } )
@@ -40,8 +41,9 @@ const DeleteUserCampaignHandle = (req, res) => {
     if(!!campaignId && !!userEmail) {
         const cntx = req.dbContext;
 
-        cntx.Campaigns
-            .remove( { _id: campaignId, email: userEmail } )
+        cntx.Campaign
+            .item( campaignId, campaignId)
+            .delete()
             .then( (_) => {
                 // Nothing really to log as only the deletion count is returned.
 
@@ -66,18 +68,33 @@ const DeleteUserCampaignHandle = (req, res) => {
 const ReadAllHandle = (req, res) => {
     const context = req.dbContext;
 
-    context.Campaigns
-           .find({})
-           .then((matches) => {
-                res.status( StatusCodes.OK )
-                   .send( matches );
-           } )
-           .catch((err) => {
-               console.log(err);
+    try {
+        const querySpecification = {
+            query: `SELECT * from c`
+        };
 
-               res.status( StatusCodes.INTERNAL_SERVER_ERROR )
-                  .send(err);
-           });
+        context.Campaigns
+            .query( querySpecification )
+            .fetchAll()
+            .then((result) => {
+                    const {resources: matches} = result;
+
+                    res.status( StatusCodes.OK )
+                    .send( matches );
+            } )
+            .catch((err) => {
+                console.log(err);
+
+                res.status( StatusCodes.INTERNAL_SERVER_ERROR )
+                    .send(err);
+            });
+    }
+    catch(err) {
+        console.log(err);
+
+        res.status( StatusCodes.INTERNAL_SERVER_ERROR)
+           .send("Context error");
+    }
 };
 
 const UpdateUserCampaignHandle = (req, res) => {
@@ -86,20 +103,15 @@ const UpdateUserCampaignHandle = (req, res) => {
     const campaignId = req.params.id;
 
     if(!!campaignId && !!userEmail) {
-        // Create a clone and ensure any ID property is removed.
-
         var updatedCampaign = { ...req.body };
 
-        if( updatedCampaign._id ) {
-            delete( updatedCampaign._id );
-        }
-
-        const criteria = { _id: campaignId, email: userEmail };
+        updatedCampaign.id = campaignId;
 
         const cntx = req.dbContext;
 
-        cntx.Campaigns
-            .update( criteria, updatedCampaign )
+        cntx.Campaign
+            .item( campaignId, campaignId )
+            .replace( updatedCampaign )
             .then( (_) => {
                 // Like with deletes, only the number of changes is returned.
                 //

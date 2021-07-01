@@ -31,7 +31,7 @@ const reduceEditCampaign = (state, target) => {
 };
 
 const reduceRemoveCampaignSuccess = (state, target) => {
-    const modifiedCampaigns = state.campaigns.filter( c => c._id !== target.value._id );
+    const modifiedCampaigns = state.campaigns.filter( c => c.id !== target.value.id );
 
     const rtn = {...state, campaigns: modifiedCampaigns};
 
@@ -57,7 +57,7 @@ const reduceUpdateCampaignSuccess = (state, target) => {
     const campaign = target.value;
 
     var original = state.campaigns
-                        .filter( c => c._id === campaign._id )[ 0 ];
+                        .filter( c => c.id === campaign.id )[ 0 ];
 
     original.title = campaign.title;
     original.poolSize = campaign.poolSize;

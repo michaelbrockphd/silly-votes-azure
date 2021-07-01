@@ -1,14 +1,17 @@
-import mongoose from 'mongoose';
+import {CosmosClient} from '@azure/cosmos';
 
-import CampaignSchema from './CampaignSchema.mjs';
+const createContext = (options) => {
+    const { connectionString, databaseId, containerId } = options;
 
-const createContext = (connectionString) => {
-    const connectionOptions = { useNewUrlParser: true };
+    const client = new CosmosClient( connectionString );
 
-    const connection = mongoose.createConnection(connectionString, connectionOptions);
+    const db = client.database(databaseId);
+
+    const container = db.container(containerId);
 
     return( {
-        Campaigns: connection.model(CampaignSchema.name, CampaignSchema.schema)
+        Campaign: container,
+        Campaigns: container.items
     } );
 };
 

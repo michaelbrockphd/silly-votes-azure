@@ -6,7 +6,7 @@ import { AppBar, Button, Link, Toolbar, Typography } from '@material-ui/core';
 import { useAuthorization } from '../../contexts/AuthorizationContext';
 
 export default function AppHeader() {
-    const { isLoggedIn, currentUser, logout } = useAuthorization();
+    const { OOS_isLoggedIn, signOut } = useAuthorization();
     
     return(
         <AppBar position="static">
@@ -15,17 +15,17 @@ export default function AppHeader() {
                     <Link className={appHeaderStyles.companyTitleLink} href="/campaigns">Silly Votes</Link>
                 </Typography>
                 
-                {isLoggedIn &&
+                {OOS_isLoggedIn() &&
                     <Fragment>
                         <Typography className={appHeaderStyles.loggedInUser}>
-                            <Link className={appHeaderStyles.loggedInUserLink} href='/profile'>{currentUser().email}</Link>
+                            <Link className={appHeaderStyles.loggedInUserLink} href='/profile'>Your Campaigns</Link>
                         </Typography>
 
-                        <Button onClick={logout} variant="contained" color="default" size="small">Log Out</Button>
+                        <Button onClick={signOut} variant="contained" color="default" size="small">Log Out</Button>
                     </Fragment>}
 
-                {!isLoggedIn &&
-                    <Button href="/login" variant="contained" color="default" size="small">Log In</Button>}
+                {!OOS_isLoggedIn() &&
+                    <Button href="/profile" variant="contained" color="default" size="small">Log In</Button>}
             </Toolbar>
         </AppBar>
     );

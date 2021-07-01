@@ -33,20 +33,20 @@ const CampaignTable = (props) => {
                         <TableCell align="center">Choice 1</TableCell>
                         <TableCell align="center">Choice 2</TableCell>
                         {canModify && <TableCell align="center">
-                            <Link href="#" onClick={addCampaign}>New Campaign...</Link>
+                            <Link onClick={addCampaign}>New Campaign...</Link>
                         </TableCell>}
                     </TableRow>
                 </TableHead>
 
                 <TableBody>
                     {campaigns.map(c => (
-                        <TableRow key={c._id}>
+                        <TableRow key={c.id}>
                             <TableCell component="th" scope="row">{c.title}</TableCell>
                             <TableCell align="center">{c.poolSize}</TableCell>
                             <TableCell align="center">{c.choices[0]}</TableCell>
                             <TableCell align="center">{c.choices[1]}</TableCell>
                             {canModify && <TableCell align="center">
-                                <Link href="#" onClick={() => editCampaign(c)}>Edit</Link>/<Link href="#" onClick={() => deleteCampaign(c)}>Delete</Link>
+                                <Link onClick={() => editCampaign(c)}>Edit</Link>/<Link onClick={() => deleteCampaign(c)}>Delete</Link>
                             </TableCell>}
                         </TableRow>
                     ))}

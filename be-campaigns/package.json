@@ -9,10 +9,9 @@
   "author": "Michael Brock, Ph.D",
   "license": "ISC",
   "dependencies": {
+    "@azure/cosmos": "^3.11.5",
     "express": "^4.17.1",
     "http-status-codes": "^2.1.4",
-    "jsonwebtoken": "^8.5.1",
-    "mongo": "^0.1.0",
-    "mongoose": "^5.12.14"
+    "jsonwebtoken": "^8.5.1"
   }
 }

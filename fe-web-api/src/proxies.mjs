@@ -11,12 +11,6 @@ const createProxy = ( targets, serviceUrl ) => {
     return( rtnProxy );
 };
 
-const createAuthorizationProxy = (serviceUrl) => {
-    const rtnProxy = createProxy( ["/login"], serviceUrl );
-
-    return(rtnProxy);
-};
-
 const createCampaignProxy = (serviceUrl) => {
     const rtnProxy = createProxy( ["/campaigns"], serviceUrl );
 
@@ -30,13 +24,11 @@ const createUserCampaignProxy = (serviceUrl) => {
 };
 
 const ProxyFactory = {
-    createAuthorizationProxy: createAuthorizationProxy,
     createCampaignProxy: createCampaignProxy,
     createUserCampaignProxy: createUserCampaignProxy
 };
 
 export {
-    createAuthorizationProxy,
     createCampaignProxy,
     createUserCampaignProxy
 };

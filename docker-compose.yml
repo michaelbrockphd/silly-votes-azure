@@ -1,48 +1,12 @@
 version: '3.9'
 
 services:
-    db:
-        environment:
-            - MONGO_INITDB_ROOT_USERNAME=root
-            - MONGO_INITDB_ROOT_PASSWORD=babelfishe
-
-        build:
-            context: ./db-mongo
-
-        image: sv_db
-
-        volumes:
-            - type: volume
-              source: vol-db
-              target: /data/db
-
-        ports:
-            - target: 27017
-              published: 27017
-
-        networks:
-            - net-pub
-
-    be-auth:
-        environment:
-            - JWT_SECRET=gakushuufukurou
-            
-        build:
-            context: ./be-auth-dev
-
-        image: sv_be-auth:dev
-
-        ports:
-            - target: 9001
-              published: 9001
-
-        networks:
-            - net-pub
-
     be-campaigns:
         environment:
-            - DB_RO=mongodb://adent:earth@db:27017/sillyvotes
-            - DB_RW=mongodb://fprefect:galaxy@db:27017/sillyvotes
+            - DB_RO=${DB_RO_CAMPAIGN}
+            - DB_RW=${DB_RW_CAMPAIGN}
+            - DB_ID=${DB_ID_CAMPAIGN}
+            - CONTAINER_ID=${CONTAINER_ID_CAMPAIGN}
 
         build:
             context: ./be-campaigns
@@ -58,8 +22,7 @@ services:
 
     fe-web-api:
         environment:
-            - JWT_SECRET=gakushuufukurou
-            - BE_AUTH_URL=http://be-auth:9001
+            - AUTH_URI=${B2C_AUTH_URI}
             - BE_CAMPAIGNS_URL=http://be-campaigns:9002
 
         build:
@@ -76,6 +39,8 @@ services:
 
     fe-web:
         environment:
+            - FE_AUTH_URL_REDIRECT=${AUTH_URL_REDIRECT}
+            - FE_AUTH_URL_REDIRECT_POST_SIGNOUT=${AUTH_URL_REDIRECT_POST_SIGNOUT}
             - FE_WEB_API_URL=http://fe-web-api:9000
 
         build:
@@ -89,9 +54,6 @@ services:
 
         networks:
             - net-pub
-
-volumes:
-    vol-db:
 
 networks:
     net-pub:

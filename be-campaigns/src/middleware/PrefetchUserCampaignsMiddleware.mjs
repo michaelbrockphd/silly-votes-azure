@@ -3,10 +3,17 @@ export default function preFetchUserCampaigns(req, res, next) {
         const userId = req.userIdentity.email;
 
         if( userId ) {
+            const querySpecification = {
+                query: `SELECT * from c where c.email = '${userId}'`
+            };
+
             req.dbContext
                .Campaigns
-               .find( { email: userId } )
-               .then((matches) => {
+               .query( querySpecification )
+               .fetchAll()
+               .then((result) => {
+                   const { resources: matches } = result;
+
                    req.existingData = matches;
 
                    next();

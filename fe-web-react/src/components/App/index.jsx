@@ -3,12 +3,10 @@ import appStyles from './App.module.css';
 import { BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-dom';
 
 import { AuthorizationProvider } from '../../contexts/AuthorizationContext';
+import AuthenticatedRoute from '../../components/AuthenticatedRoute';
 import AppHeader from '../AppHeader';
 import AppFooter from '../AppFooter';
 import Campaigns from '../Campaigns';
-import Login from '../Login';
-import Members from '../Members';
-import PrivateRoute from '../PrivateRoute';
 import Profile from '../Profile';
 
 function App() {
@@ -24,9 +22,7 @@ function App() {
                                 <Redirect to="/campaigns" />
                             </Route>
                             <Route exact path="/campaigns" component={Campaigns} />
-                            <Route exact path="/login" component={Login} />
-                            <PrivateRoute exact path="/members" loginAt="/login" component={Members} />
-                            <PrivateRoute exact path="/profile" loginAt="/login" component={Profile} />
+                            <AuthenticatedRoute path="/profile" component={Profile} />
                         </Switch>
                     </Router>
                 </div>

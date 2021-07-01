@@ -1,128 +1,88 @@
-// Old version taken from SkillBakery.  Retained a second attempt is made with that approach.
-/*import authentication from '@kdpw/msal-b2c-react';
-import decodeJWT from 'jwt-decode';
+// Sourced from:
+// * https://dev.to/finiam/predictable-react-authentication-with-the-context-api-g10
+// * https://www.udemy.com/course/create-serverless-apps-using-azure/learn/lecture/26773158#overview
+// * https://www.npmjs.com/package/ad-b2c-react
 
-class AuthWrapper {
-    isLoggedIn() {
-        const token = this.getToken();
-
-        return( token ? true : false );
-    }
-
-    logout() {
-        authentication.signOut();
-    }
-
-    getToken() {
-        return authentication.getAccessToken();
-    }
-
-    currentUser() {
-        const decoded = decodeJWT(this.getToken());
-
-        return( {
-            email: decoded.emails[ 0 ],
-        } );
-    }
-}*/
-
-// Sourced from: https://dev.to/finiam/predictable-react-authentication-with-the-context-api-g10
-
-import axios from 'axios';
+import authentication from '@kdpw/msal-b2c-react';
 import jwt from 'jsonwebtoken';
 import {
     createContext,
     useContext,
-    useMemo,
-    useState
+    useMemo
 } from 'react';
-
-const authStorage = () => {
-    return sessionStorage;
-};
-
-const getInitialState = () => {
-    var rtnIsLoggedIn = false;
-
-    const token = authStorage().getItem( 'authorization' );
-
-    if(token) {
-        const decoded = jwt.decode(token);
-
-        if(decoded) {
-            rtnIsLoggedIn = !!decoded.email;
-        }
-    }
-
-    return rtnIsLoggedIn;
-};
-
-const baseUrl = process.env.FE_WEB_API_URL || 'http://localhost:9000';
-const methodNameLogin = 'login';
 
 const IsAuthenticatedContext = createContext( false );
 
-export function AuthorizationProvider( {children} ) {
-    const initial = getInitialState();
+// Long story short, the msal-b2c-react library has a limitation where any
+// element outside the run() and required() calls will not be able to tell if
+// the user is logged in or not.
+//
+// For now, rather than fork and heavily modify the library (it's still a good
+// library!) a small kludge is used so the logged in state can be determined.
+//
+// Basically, the access token scope is kept and window.msal is queried
+// directly.
+//
+// This behaviour will be in its own function, OOS_isLoggedIn, short for
+// Out Of Scope.
 
-    const [isLoggedIn, setIsLoggedIn] = useState(initial);
+var authScopes = [];
 
-    function getToken() {
-        const authHeaderVal = authStorage().getItem( 'authorization' );
+export function initializeAuthentication( authOptions ) {
+    authScopes = authOptions.scopes || [];
 
-        return( authHeaderVal );
+    authentication.initialize( authOptions );
+};
+
+export function OOS_isLoggedIn() {
+    var rtnIsLoggedIn = false;
+
+    const msalApp = window.msal;
+
+    if( msalApp && msalApp.getUser ) {
+        const user = msalApp.getUser( authScopes );
+
+        rtnIsLoggedIn = !!user;
     }
 
-    async function login( userDetails ) {
-        const reqData = {
-            email: userDetails.email
-        };
+    return( rtnIsLoggedIn );
+};
 
-        const parameters = {
-            method: 'post',
-            url: `${baseUrl}/${methodNameLogin}`,
-            data: reqData
-        };
-
-        axios( parameters )
-            .then( (rsp) => {
-                const authHeaderVal = rsp.headers[ 'authorization' ];
-
-                if( authHeaderVal ) {
-                    console.log( `authHead: ${authHeaderVal}` );
-
-                    authStorage().setItem( 'authorization', authHeaderVal );
-
-                    setIsLoggedIn(true);
-                }
-                else {
-                    alert( "Login failed, :( " );
-                }
-            } )
-            .catch( (err) => {
-                console.log( err );
-            } );
-    };
-    
-    async function logout() {
-        authStorage().removeItem( 'authorization' );
-
-        setIsLoggedIn(false);
+export function AuthorizationProvider( {children} ) {
+    const getAccessToken = () => {
+        return( authentication.getAccessToken() );
     };
 
-    function currentUser() {
-        return({
-            email: "email@example.com"
-        });
+    const isLoggedIn = () => {
+        return( getAccessToken() ? true : false );
+    }
+
+    const currentUser = () => {
+        const token = getAccessToken();
+
+        const decoded = jwt.decode(token);
+
+        if(!!decoded) {
+            return(decoded.emails[0]);
+        }
+        else {
+            return(null);
+        }
     };
+
+    // Expose/pass-thru existing methods.
+
+    const required = authentication.required;
+    const signOut = authentication.signOut;
 
     const memoedValue = useMemo(
         () => ({
-          isLoggedIn,
-          getToken,
-          login,
-          logout,
-          currentUser
+            isLoggedIn,
+            OOS_isLoggedIn,
+            getAccessToken,
+            currentUser,
+            required,
+            signOut
         }),
         [isLoggedIn]
       );

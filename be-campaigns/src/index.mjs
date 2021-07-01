@@ -12,8 +12,11 @@ import createDbCtxMdl from './middleware/ReadOnlyContextMiddleware.mjs';
 const app = express();
 const port = process.env.BE_CAMPAIGNS_PORT || 9002;
 
-const roConnStr = process.env.DB_RO || 'mongodb://adent:earth@localhost:27017/sillyvotes';
-const rwConnStr = process.env.DB_RW || 'mongodb://fprefect:galaxy@localhost:27017/sillyvotes';
+const roConnStr = process.env.DB_RO;
+const rwConnStr = process.env.DB_RW;
+
+const dbId = process.env.DB_ID;
+const cntrId = process.env.CONTAINER_ID;
 
 app.use( express.json() );
 app.use( express.urlencoded( { extended : true } ));
@@ -22,8 +25,17 @@ app.use( express.urlencoded( { extended : true } ));
 //
 // Based on https://docs.microsoft.com/en-us/aspnet/core/tutorials/first-web-api?view=aspnetcore-5.0&tabs=visual-studio
 
-const mdlSetRoContext = createDbCtxMdl( roConnStr );
-const mdlSetRwContext = createDbCtxMdl( rwConnStr );
+const mdlSetRoContext = createDbCtxMdl({
+    connectionString: roConnStr,
+    databaseId: dbId,
+    containerId: cntrId
+});
+
+const mdlSetRwContext = createDbCtxMdl({
+    connectionString: rwConnStr,
+    databaseId: dbId,
+    containerId: cntrId
+});
 
 app.get(
     '/campaigns',

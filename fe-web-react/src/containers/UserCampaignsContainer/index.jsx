@@ -28,9 +28,9 @@ const UserCampaignsContainer = (props) => {
         isEditingDetails,
         campaignDetails }, dispatch] = useReducer(reducer, initialState);
 
-    const { getToken } = useAuthorization();
+    const { getAccessToken } = useAuthorization();
 
-    const token = getToken();
+    const token = getAccessToken();
 
     useEffect(() => {
         WebApi.getUserCampaigns( token )
