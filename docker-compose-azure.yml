@@ -1,0 +1,42 @@
+version: '3.9'
+
+services:
+    be-campaigns:
+        environment:
+            - DB_RO=${DB_RO_CAMPAIGN}
+            - DB_RW=${DB_RW_CAMPAIGN}
+            - DB_ID=${DB_ID_CAMPAIGN}
+            - CONTAINER_ID=${CONTAINER_ID_CAMPAIGN}
+
+        build:
+            context: ./be-campaigns
+
+        image: azsillyvotes.azurecr.io/sv_be-campaigns
+
+        ports:
+            - target: 9002
+              published: 9002
+
+        networks:
+            - net-pub
+
+    fe-web-api:
+        environment:
+            - AUTH_URI=${B2C_AUTH_URI}
+            - BE_CAMPAIGNS_URL=http://be-campaigns:9002
+
+        build:
+            context: ./fe-web-api
+
+        image: azsillyvotes.azurecr.io/sv_fe-web-api
+
+        ports:
+            - target: 9000
+              published: 9000
+
+        networks:
+            - net-pub
+
+networks:
+    net-pub:
+        name: silly-votes-net-pub
