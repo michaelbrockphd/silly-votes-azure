@@ -39,6 +39,10 @@ services:
 
     fe-web:
         environment:
+            - REACT_APP_B2C_LOGIN_URL=${B2C_LOGIN_URL}
+            - REACT_APP_B2C_TENANT=${B2C_TENANT}
+            - REACT_APP_B2C_USERFLOW_NAME=${B2C_USERFLOW_NAME}
+            - REACT_APP_B2C_APP_ID=${B2C_APP_ID}
             - REACT_APP_FE_AUTH_URL_REDIRECT=${AUTH_URL_REDIRECT}
             - REACT_APP_FE_AUTH_URL_REDIRECT_POST_SIGNOUT=${AUTH_URL_REDIRECT_POST_SIGNOUT}
             - REACT_APP_FE_WEB_API_URL=http://fe-web-api:9000

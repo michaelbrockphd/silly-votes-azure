@@ -7,19 +7,19 @@ import {initializeAuthentication} from './contexts/AuthorizationContext';
 
 initializeAuthentication({
     // you can user your b2clogin.com domain here, setting is optional, will default to this
-    instance: 'https://YOUR_TENANT.b2clogin.com/tfp/', 
+    instance: process.env.REACT_APP_B2C_LOGIN_URL,
 
     // your B2C tenant, you can also use tenants GUID here
-    tenant: 'YOUR_TENANT.onmicrosoft.com',
+    tenant: process.env.REACT_APP_B2C_TENANT,
     
     // the policy to use to sign in, can also be a sign up or sign in policy
-    signInPolicy: 'B2C User Flow Name',
+    signInPolicy: process.env.REACT_APP_B2C_USERFLOW_NAME,
 
     // the policy to use for password reset
     //resetPolicy: 'mypasswordresetpolicy',
 
     // the the B2C application you want to authenticate with (that's just a random GUID - get yours from the portal)
-    applicationId: 'B2C App GUID',
+    applicationId: process.env.REACT_APP_B2C_APP_ID,
 
     // where MSAL will store state - localStorage or sessionStorage
     cacheLocation: 'sessionStorage',
