@@ -28,10 +28,10 @@ initializeAuthentication({
     scopes: ['profile', 'openid'],
 
     // optional, the redirect URI - if not specified MSAL will pick up the location from window.href
-    redirectUri: process.env.FE_AUTH_URL_REDIRECT,
+    redirectUri: process.env.REACT_APP_FE_AUTH_URL_REDIRECT,
 
     // optional, the URI to redirect to after logout
-    postLogoutRedirectUri: process.env.FE_AUTH_URL_REDIRECT_POST_SIGNOUT,
+    postLogoutRedirectUri: process.env.REACT_APP_FE_AUTH_URL_REDIRECT_POST_SIGNOUT,
 
     // optional, default to true, set to false if you change instance
     validateAuthority: false

@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const baseUrl = process.env.FE_WEB_API_URL || 'http://localhost:9000';
+const baseUrl = process.env.REACT_APP_FE_WEB_API_URL || 'http://localhost:9000';
 
 class WebApi {
     getCampaigns() {
