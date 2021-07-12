@@ -1,34 +1,13 @@
-# Silly Votes
+# Silly Votes (Azure)
 
-A small, microservice-oriented project for running imaginary campaigns.
+A variation of the main Silly Votes project, mainly to try and have the same idea but using services offered in Azure.
 
-## Purpose
+The goal is to try and utilize B2C, CosmosDB and eventually Azure functions.
 
-Primary this is a self-learning project to understand how to build a system via microservices.
+## Current Status
 
-In terms of technology stack, most of the project is NodeJS with Express and React used where needed.
+Regretibly, this side project is on hold.  In trying to get my docker images up and running, I encountered an issue trying to expose one of the resulting containers with HTTPS.
 
-## Inspirations
+To add to my own personal embarrasment, the main cloud technology in my area is actually AWS.
 
-Some patterns in this project are actually inspired from features seen when trailing Microsft Azure functions.  Of interest in here is the use of Express middleware to carry out common tasks and have the outcomes injected into the action handle.
-
-## Services
-
-This section lists the services created so far and which are still planned to be created (at the time of writing).
-
-Technically, this is more a list of containers but when given a network connection they offer a service thus still count as services.
-
-|Service|Description|Built?|
-|:---|:---|:---:|
-|be-auth-dev|Dummy service that simply creates a JWT token, nothing else|Y|
-|be-campaigns|Overseas all access to campaigns stored in a mongo DB|Y|
-|be-votes|Overseas all access to votes stored in a mongo DB|N|
-|db-mongo|Holds the Mongo database|Y|
-|fe-web-api|What passes for a reverse proxy and effective collates the API of all other services behind it|Y|
-|fe-web-react|The actual front end that users via a browser see.  As the name implies, it is written in React.|Y|
-
-## Authentication Notes
-
-Admittedly, this requires ALOT of improvement.  At the time of writing, it simply allows a hassle free way of creating a JWT token with just a email address (which acts as the user identifier for the rest of the system).
-
-In future, it maybe extended to actually require a email AND password but for now, it is there to simply provide a token the other microservices for authentication purposes.
+This project is not forgotten, but it is resting and some of its ideas will be brought in to the main Silly Votes repository.
